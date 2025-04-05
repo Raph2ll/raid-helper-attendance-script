@@ -22,6 +22,7 @@
         console.error(`❌ Servidor com nome semelhante a ${serverName} não encontrado!`);
     }
 
+    document.querySelector(serverMainChat).click();
 
     const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
         serverMembersList.click();
