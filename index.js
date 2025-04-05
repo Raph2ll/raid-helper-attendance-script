@@ -75,7 +75,7 @@
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         const logNewUsers = () => {
-            const members = document.querySelectorAll('span.name__5d473.username__703b9.desaturateUserColors__41f68');
+            const members = document.querySelectorAll('span.name__5d473.username__703b9.desaturateUserColors__41f68[style*="color: rgb(46, 204, 113);"]');
             members.forEach(member => {
                 const username = member.textContent.trim();
                 if (!seenUsers.has(username)) {
