@@ -3,7 +3,6 @@
     const serverChat = "containerDefault_c69b6d"
     const serverList = "Mostrar lista de membros"
 
-    // 1️⃣ Encontra o servidor correto na barra lateral esquerda
     const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
     
     let serverElement = null;
