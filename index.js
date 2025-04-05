@@ -12,23 +12,21 @@
             return;
         }
     
-        const scroll = () => {
-            const previousScrollTop = el.scrollTop;
+        let previousScrollTop = -1;
+    
+        while (true) {
             el.scrollBy({ top: step, behavior: 'smooth' });
+            await new Promise(resolve => setTimeout(resolve, delay));
     
-            setTimeout(() => {
-                const currentScrollTop = el.scrollTop;
+            const currentScrollTop = el.scrollTop;
     
-                if (Math.abs(currentScrollTop - previousScrollTop) < 5) {
-                    console.log("✅ Scroll completed!");
-                    return;
-                }
+            if (Math.abs(currentScrollTop - previousScrollTop) < 5) {
+                console.log("✅ Scroll completed!");
+                break;
+            }
     
-                scroll();
-            }, delay);
-        };
-    
-        scroll();
+            previousScrollTop = currentScrollTop;
+        }
     };
 
     const getOneMonthAgoDate = () => {
