@@ -42,28 +42,44 @@
         });
     };
     
-    const scrollDown = (query) => {
-            document.querySelector(query).scrollTo({ top: 100000, behavior: 'smooth' });
-            setTimeout(scrollDown, 500);
-    };
+    const scrollUntilEnd = (query, step, delay = 300) => {
+        const el = document.querySelector(query);
+        if (!el) {
+            console.error("Elemento não encontrado!");
+            return;
+        }
     
-    const scrollUp = (query) => {
-        document.querySelector(query).scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(scrollDown, 500);
+        const scroll = () => {
+            const previousScrollTop = el.scrollTop;
+            el.scrollBy({ top: step, behavior: 'smooth' });
+    
+            setTimeout(() => {
+                const currentScrollTop = el.scrollTop;
+    
+                if (Math.abs(currentScrollTop - previousScrollTop) < 5) {
+                    console.log("✅ Scroll completed!");
+                    return;
+                }
+    
+                scroll();
+            }, delay);
+        };
+    
+        scroll();
     };
 
     const observer = new MutationObserver(logNewUsers);
     
     const memberList = document.querySelector('div[role="list"][aria-label="Membros"]');
+    scrollUntilEnd(memberListQuery, -10000)
     if (memberList) {
         observer.observe(memberList, { childList: true, subtree: true });
-        console.log("✅ Observando a lista de membros...");
+        console.log("✅ Looking at the list of members...");
         logNewUsers();
-        scrollDown('.membersWrap_c8ffbb .scrollerBase__99f8c');
+        scrollUntilEnd(memberListQuery, 200);
     } else {
-        console.error("❌ Lista de membros não encontrada!");
+        console.error("❌ Member list not found!");
     }
-console.log(seenUsers)
 }
 )();
 
