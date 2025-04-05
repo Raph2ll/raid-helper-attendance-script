@@ -29,7 +29,7 @@
     
         scroll();
     };
-    
+
     const getOneMonthAgoDate = () => {
         const today = new Date();
         const oneMonthAgo = new Date(today);
@@ -57,9 +57,9 @@
     
     if (serverElement) {
         serverElement.click();
-        console.log(`✅ Servidor "${serverElement.getAttribute('aria-label')}" aberto!`);
+        console.log(`✅ Server:"${serverElement.getAttribute('aria-label')}" open!`);
     } else {
-        console.error(`❌ Servidor com nome semelhante a ${serverName} não encontrado!`);
+        console.error(`❌ Server with name similar to ${serverName} not found!`);
     }
     await scrollUntilEnd('#channels', -10000)
 
@@ -67,18 +67,18 @@
 
     const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
         serverMembersList.click();
-        console.log(`✅ Lista de membros aberta!`);
+        console.log(`✅ Member list open!`);
         
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    const seenUsers = new Set();
+    const seenUsers = new Map();
 
     const logNewUsers = () => {
         const members = document.querySelectorAll('span.name__5d473.username__703b9.desaturateUserColors__41f68');
         members.forEach(member => {
             const username = member.textContent.trim();
             if (!seenUsers.has(username)) {
-                seenUsers.add(username);
+                seenUsers.set(username, false);
                 console.log(username);
             }
         });
