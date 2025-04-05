@@ -28,7 +28,6 @@
         serverMembersList.click();
         console.log(`✅ Lista de membros aberta!`);
         
-    // Aguarda 2 segundos para garantir que a lista carregou
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     const seenUsers = new Set();
