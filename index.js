@@ -3,6 +3,7 @@
     const memberListScrollQuery = '.membersWrap_c8ffbb .scrollerBase__99f8c';
     const serverMainChat = 'a[href="/channels/1318374478270562368/1318738271332991056"]';
     const serverList = "Mostrar lista de membros";
+    const seenUsers = new Map();
 
     const scrollUntilEnd = async (query, step, delay = 300) => {
         const el = document.querySelector(query);
@@ -62,43 +63,44 @@
             console.error(`❌ Server with name similar to ${serverName} not found!`);
         }
     }
-    await findServer()
 
-    await scrollUntilEnd('#channels', -10000)
+    const getAllMembers = async () => {
+        await scrollUntilEnd('#channels', -10000)
+        document.querySelector(serverMainChat).click();
 
-    document.querySelector(serverMainChat).click();
+        const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
+            serverMembersList.click();
+            console.log(`✅ Member list open!`);
+            
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
-    const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
-        serverMembersList.click();
-        console.log(`✅ Member list open!`);
+        const logNewUsers = () => {
+            const members = document.querySelectorAll('span.name__5d473.username__703b9.desaturateUserColors__41f68');
+            members.forEach(member => {
+                const username = member.textContent.trim();
+                if (!seenUsers.has(username)) {
+                    seenUsers.set(username, false);
+                    console.log(username);
+                }
+            });
+        };
         
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const seenUsers = new Map();
-
-    const logNewUsers = () => {
-        const members = document.querySelectorAll('span.name__5d473.username__703b9.desaturateUserColors__41f68');
-        members.forEach(member => {
-            const username = member.textContent.trim();
-            if (!seenUsers.has(username)) {
-                seenUsers.set(username, false);
-                console.log(username);
-            }
-        });
-    };
-    
-    const observer = new MutationObserver(logNewUsers);
-    
-    const memberList = document.querySelector('div[role="list"][aria-label="Membros"]');
-    await scrollUntilEnd(memberListScrollQuery, -10000)
-    if (memberList) {
-        observer.observe(memberList, { childList: true, subtree: true });
-        console.log("✅ Looking at the list of members...");
-        logNewUsers();
-        await scrollUntilEnd(memberListScrollQuery, 200);
-    } else {
-        console.error("❌ Member list not found!");
+        const observer = new MutationObserver(logNewUsers);
+        
+        const memberList = document.querySelector('div[role="list"][aria-label="Membros"]');
+        await scrollUntilEnd(memberListScrollQuery, -10000)
+        if (memberList) {
+            observer.observe(memberList, { childList: true, subtree: true });
+            console.log("✅ Looking at the list of members...");
+            logNewUsers();
+            await scrollUntilEnd(memberListScrollQuery, 200);
+        } else {
+            console.error("❌ Member list not found!");
+        }
     }
+
+    await findServer()
+    await getAllMembers()
 }
 )();
 
