@@ -29,6 +29,19 @@
     
         scroll();
     };
+    
+    const getOneMonthAgoDate = () => {
+        const today = new Date();
+        const oneMonthAgo = new Date(today);
+    
+        oneMonthAgo.setMonth(today.getMonth() - 1);
+    
+        if (oneMonthAgo.getMonth() === today.getMonth()) {
+            oneMonthAgo.setDate(0);
+        }
+    
+        return oneMonthAgo;
+    }
 
     const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
     
