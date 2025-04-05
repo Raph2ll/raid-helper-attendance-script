@@ -33,11 +33,11 @@
         const today = new Date();
         const oneMonthAgo = new Date(today);
         oneMonthAgo.setMonth(today.getMonth() - 1);
-    
+
         if (oneMonthAgo.getMonth() === today.getMonth()) {
             oneMonthAgo.setDate(0);
         }
-    
+
         return new Intl.DateTimeFormat('pt-BR').format(oneMonthAgo);
     };
 
@@ -45,7 +45,7 @@
     const findServer = async () => {
         const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
         let serverElement = null;
-        
+
         for (const element of allServers) {
             const label = element.getAttribute('aria-label');
             if (serverName.test(label)) {
@@ -53,7 +53,7 @@
                 break;
             }
         }
-        
+
         if (serverElement) {
             serverElement.click();
             console.log(`✅ Server:"${serverElement.getAttribute('aria-label')}" open!`);
@@ -62,12 +62,40 @@
         }
     }
 
+    const findChannel = (channel) => {
+        scrollUntilEnd('#channels', -10000)
+        const seenChannels = new Set();
+
+        const logTargetChannel = () => {
+            const target = document.querySelector(channel);
+            if (target && !seenChannels.has(target.href)) {
+                seenChannels.add(target.href);
+                console.log("✅ Channel found:", target.href);
+                target.click();
+            }
+        };
+
+        const observer = new MutationObserver(logTargetChannel);
+
+        const channelList = document.querySelector('#channels');
+
+        if (channelList) {
+            observer.observe(channelList, { childList: true, subtree: true });
+            console.log("👀 Looking at the channel list...");
+
+            scrollUntilEnd('#channels', 200);
+            logTargetChannel();
+        } else {
+            console.error("❌ Channel not found!");
+        }
+    }
+
     const getAllMembers = async () => {
         await scrollUntilEnd('#channels', -10000)
         document.querySelector(serverMainChat).click();
 
         const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
-        if (serverMembersList){
+        if (serverMembersList) {
             serverMembersList.click();
             console.log(`✅ Member list open!`);
         } else {
@@ -86,9 +114,9 @@
                 }
             });
         };
-        
+
         const observer = new MutationObserver(logNewUsers);
-        
+
         const memberList = document.querySelector('div[role="list"][aria-label="Membros"]');
         await scrollUntilEnd(memberListScrollQuery, -10000)
         if (memberList) {
@@ -99,11 +127,10 @@
         } else {
             console.error("❌ Member list not found!");
         }
+        findChannel('a[href="/channels/1318374478270562368/1323363691156082778"]')
     }
 
     await findServer()
-    await getAllMembers()
+    getAllMembers()
 }
 )();
-
-// tem que scrolar para achar alguns canais...
