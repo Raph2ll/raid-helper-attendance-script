@@ -24,9 +24,6 @@
     }
 
 
-    document.querySelector('a[href="/channels/1318374478270562368/1318738271332991056"]').click();
-
-    // Encontra o a lista de membros
     const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
         serverMembersList.click();
         console.log(`✅ Lista de membros aberta!`);
