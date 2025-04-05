@@ -69,9 +69,13 @@
         document.querySelector(serverMainChat).click();
 
         const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
+        if (serverMembersList){
             serverMembersList.click();
             console.log(`✅ Member list open!`);
-            
+        } else {
+            console.log(`✅ Member list already open!`);
+        }
+
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         const logNewUsers = () => {
