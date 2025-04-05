@@ -42,24 +42,28 @@
         return new Intl.DateTimeFormat('pt-BR').format(oneMonthAgo);
     };
 
-    const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
-    
-    let serverElement = null;
-    
-    for (const element of allServers) {
-        const label = element.getAttribute('aria-label');
-        if (serverName.test(label)) {
-            serverElement = element;
-            break;
+    // Only works for non-clustered servers
+    const findServer = async () => {
+        const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
+        let serverElement = null;
+        
+        for (const element of allServers) {
+            const label = element.getAttribute('aria-label');
+            if (serverName.test(label)) {
+                serverElement = element;
+                break;
+            }
+        }
+        
+        if (serverElement) {
+            serverElement.click();
+            console.log(`✅ Server:"${serverElement.getAttribute('aria-label')}" open!`);
+        } else {
+            console.error(`❌ Server with name similar to ${serverName} not found!`);
         }
     }
-    
-    if (serverElement) {
-        serverElement.click();
-        console.log(`✅ Server:"${serverElement.getAttribute('aria-label')}" open!`);
-    } else {
-        console.error(`❌ Server with name similar to ${serverName} not found!`);
-    }
+    await findServer()
+
     await scrollUntilEnd('#channels', -10000)
 
     document.querySelector(serverMainChat).click();
