@@ -1,49 +1,10 @@
 (async () => {
     const serverName = /round table/i;
-    const serverChat = "containerDefault_c69b6d"
-    const serverList = "Mostrar lista de membros"
+    const memberListScrollQuery = '.membersWrap_c8ffbb .scrollerBase__99f8c';
+    const serverMainChat = 'a[href="/channels/1318374478270562368/1318738271332991056"]';
+    const serverList = "Mostrar lista de membros";
 
-    const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
-    
-    let serverElement = null;
-    
-    for (const element of allServers) {
-        const label = element.getAttribute('aria-label');
-        if (serverName.test(label)) {
-            serverElement = element;
-            break;
-        }
-    }
-    
-    if (serverElement) {
-        serverElement.click();
-        console.log(`✅ Servidor "${serverElement.getAttribute('aria-label')}" aberto!`);
-    } else {
-        console.error(`❌ Servidor com nome semelhante a ${serverName} não encontrado!`);
-    }
-
-    document.querySelector(serverMainChat).click();
-
-    const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
-        serverMembersList.click();
-        console.log(`✅ Lista de membros aberta!`);
-        
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    const seenUsers = new Set();
-
-    const logNewUsers = () => {
-        const members = document.querySelectorAll('span.name__5d473.username__703b9.desaturateUserColors__41f68');
-        members.forEach(member => {
-            const username = member.textContent.trim();
-            if (!seenUsers.has(username)) {
-                seenUsers.add(username);
-                console.log(username);
-            }
-        });
-    };
-    
-    const scrollUntilEnd = (query, step, delay = 300) => {
+    const scrollUntilEnd = async (query, step, delay = 300) => {
         const el = document.querySelector(query);
         if (!el) {
             console.error("Elemento não encontrado!");
@@ -69,15 +30,56 @@
         scroll();
     };
 
+    const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
+    
+    let serverElement = null;
+    
+    for (const element of allServers) {
+        const label = element.getAttribute('aria-label');
+        if (serverName.test(label)) {
+            serverElement = element;
+            break;
+        }
+    }
+    
+    if (serverElement) {
+        serverElement.click();
+        console.log(`✅ Servidor "${serverElement.getAttribute('aria-label')}" aberto!`);
+    } else {
+        console.error(`❌ Servidor com nome semelhante a ${serverName} não encontrado!`);
+    }
+    await scrollUntilEnd('#channels', -10000)
+
+    document.querySelector(serverMainChat).click();
+
+    const serverMembersList = document.querySelector(`div[role="button"][aria-label="${serverList}"]`);
+        serverMembersList.click();
+        console.log(`✅ Lista de membros aberta!`);
+        
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const seenUsers = new Set();
+
+    const logNewUsers = () => {
+        const members = document.querySelectorAll('span.name__5d473.username__703b9.desaturateUserColors__41f68');
+        members.forEach(member => {
+            const username = member.textContent.trim();
+            if (!seenUsers.has(username)) {
+                seenUsers.add(username);
+                console.log(username);
+            }
+        });
+    };
+    
     const observer = new MutationObserver(logNewUsers);
     
     const memberList = document.querySelector('div[role="list"][aria-label="Membros"]');
-    scrollUntilEnd(memberListQuery, -10000)
+    await scrollUntilEnd(memberListScrollQuery, -10000)
     if (memberList) {
         observer.observe(memberList, { childList: true, subtree: true });
         console.log("✅ Looking at the list of members...");
         logNewUsers();
-        scrollUntilEnd(memberListQuery, 200);
+        await scrollUntilEnd(memberListScrollQuery, 200);
     } else {
         console.error("❌ Member list not found!");
     }
