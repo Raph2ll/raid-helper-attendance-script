@@ -53,7 +53,7 @@
     };
     
     const scrollUp = (query) => {
-        document.querySelector(query).scrollTo({ top: 100000, behavior: 'smooth' });
+        document.querySelector(query).scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(scrollDown, 500);
     };
 
