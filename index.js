@@ -7,7 +7,7 @@
     const scrollUntilEnd = async (query, step, delay = 300) => {
         const el = document.querySelector(query);
         if (!el) {
-            console.error("Elemento não encontrado!");
+            console.error("Element not found!");
             return;
         }
     
