@@ -109,8 +109,8 @@
             members.forEach(member => {
                 const username = member.textContent.trim();
                 if (!seenUsers.has(username)) {
-                    console.log(member.textContent);
                     seenUsers.set(username, false);
+                    console.log(username);
                 }
             });
         };
