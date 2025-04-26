@@ -109,8 +109,8 @@
             members.forEach(member => {
                 const username = member.textContent.trim();
                 if (!seenUsers.has(username)) {
+                    console.log(member.textContent);
                     seenUsers.set(username, false);
-                    console.log(username);
                 }
             });
         };
@@ -127,9 +127,10 @@
         } else {
             console.error("❌ Member list not found!");
         }
+        console.log("✅ Final seenUsers:", seenUsers);
         findChannel('a[href="/channels/1318374478270562368/1323363691156082778"]')
     }
-
+    
     await findServer()
     getAllMembers()
 }
