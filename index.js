@@ -41,7 +41,7 @@
         return new Intl.DateTimeFormat('pt-BR').format(oneMonthAgo);
     };
 
-    // Only works for non-clustered servers
+    // Only works for non-clustered servers and on top
     const findServer = async () => {
         const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
         let serverElement = null;
