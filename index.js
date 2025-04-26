@@ -43,11 +43,12 @@
 
     // Only works for non-clustered servers and on top
     const findServer = async () => {
-        const allServers = document.querySelectorAll('div[role="treeitem"][aria-label]');
+        const allServers = document.querySelectorAll('.hiddenVisually__27f77');
         let serverElement = null;
 
         for (const element of allServers) {
-            const label = element.getAttribute('aria-label');
+            const label = element.textContent.trim();
+            console.log(label)
             if (serverName.test(label)) {
                 serverElement = element;
                 break;
@@ -130,7 +131,6 @@
         console.log("✅ Final seenUsers:", seenUsers);
         findChannel('a[href="/channels/1318374478270562368/1323363691156082778"]')
     }
-    
     await findServer()
     getAllMembers()
 }
